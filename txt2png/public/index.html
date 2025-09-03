@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>txt2png</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<h1>Text to PNG</h1>
+
+	<div id="config">
+		<label for="text">Text:</label>
+		<textarea id="text" rows="10" cols="50">Hello, world!</textarea>
+
+		<label for="column_count">Columns:</label>
+		<input type="number" id="column_count" value="1">
+
+		<label for="column_width">Column Width:</label>
+		<input type="number" id="column_width" value="40">
+
+		<label for="char_spacing">Character Spacing:</label>
+		<input type="number" id="char_spacing" value="1">
+
+		<label for="line_spacing">Line Spacing:</label>
+		<input type="number" id="line_spacing" value="1">
+
+		<label for="column_spacing">Column Spacing:</label>
+		<input type="number" id="column_spacing" value="2">
+
+		<label for="scaling">Scaling:</label>
+		<input type="number" id="scaling" value="1">
+
+		<label for="margins">Margins (T, R, B, L):</label>
+		<div id="margins">
+			<input type="number" id="margin_top" value="0">
+			<input type="number" id="margin_right" value="0">
+			<input type="number" id="margin_bottom" value="0">
+			<input type="number" id="margin_left" value="0">
+		</div>
+
+		<label for="fg_color">Foreground Color (RGBA):</label>
+		<input type="text" id="fg_color" value="0,0,0,255">
+
+		<label for="bg_color">Background Color (RGBA):</label>
+		<input type="text" id="bg_color" value="255,255,255,255">
+	</div>
+	
+	<span id="image_size_label"></span>
+	<div id="result">
+		<img id="result_img" />
+	</div>
+	<span>
+		<button id="download_btn">Download</button>
+		<button id="copy_btn">Copy to Clipboard</button>
+	</span>
+
+</body>
+<script type="module" src="/index.js"></script>
+
+</html>
