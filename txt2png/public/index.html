@@ -16,29 +16,29 @@
 		<textarea id="text" rows="10" cols="50">Hello, world!</textarea>
 
 		<label for="column_count">Columns:</label>
-		<input type="number" id="column_count" value="1">
+		<input type="number" id="column_count" value="1" min="0">
 
 		<label for="column_width">Column Width:</label>
-		<input type="number" id="column_width" value="40">
+		<input type="number" id="column_width" value="40" min="0">
 
 		<label for="char_spacing">Character Spacing:</label>
-		<input type="number" id="char_spacing" value="1">
+		<input type="number" id="char_spacing" value="1" min="0">
 
 		<label for="line_spacing">Line Spacing:</label>
-		<input type="number" id="line_spacing" value="1">
+		<input type="number" id="line_spacing" value="1" min="0">
 
 		<label for="column_spacing">Column Spacing:</label>
-		<input type="number" id="column_spacing" value="2">
+		<input type="number" id="column_spacing" value="2" min="0">
 
 		<label for="scaling">Scaling:</label>
-		<input type="number" id="scaling" value="1">
+		<input type="number" id="scaling" value="1" min="0">
 
 		<label for="margins">Margins (T, R, B, L):</label>
 		<div id="margins">
-			<input type="number" id="margin_top" value="0">
-			<input type="number" id="margin_right" value="0">
-			<input type="number" id="margin_bottom" value="0">
-			<input type="number" id="margin_left" value="0">
+			<input type="number" id="margin_top" value="0" min="0">
+			<input type="number" id="margin_right" value="0" min="0">
+			<input type="number" id="margin_bottom" value="0" min="0">
+			<input type="number" id="margin_left" value="0" min="0">
 		</div>
 
 		<label for="fg_color">Foreground Color (RGBA):</label>
