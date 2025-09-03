@@ -42,7 +42,7 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
     let line_length = CONFIG.with(|c| c.borrow().column_width) as usize;
     let mut pos: usize = 0;
     let mut i: usize = 0;
-    let mut line_count = 0;
+    let mut line_count: usize = 0;
     while i < text.len() {
         match text[i] {
             b'\n' => {
@@ -113,17 +113,29 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
             }
         }
     }
+    while formatted
+        .last()
+        .copied()
+        .is_some_and(|c| c.is_ascii_whitespace())
+    {
+        formatted.pop();
+        line_count = line_count.saturating_sub(1);
+    }
     (line_count + 1, formatted)
 }
 
 fn render_pixels(total_lines: usize, text: &[u8]) -> Vec<Vec<bool>> {
     let cfg = CONFIG.with(|c| c.borrow().clone());
     let line_per_column = (total_lines as u32).div_ceil(cfg.column_count);
-    let width = cfg.column_count
-        * (cfg.column_width * (font::CHAR_WIDTH + cfg.char_spacing) - cfg.char_spacing
-            + cfg.column_spacing)
-        - cfg.column_spacing
-        + cfg.margins[1]
+    let width = if total_lines == 1 {
+        text.len() as u32 * (font::CHAR_WIDTH + cfg.char_spacing)
+            - cfg.char_spacing
+    } else {
+        cfg.column_count
+            * (cfg.column_width * (font::CHAR_WIDTH + cfg.char_spacing) - cfg.char_spacing
+                + cfg.column_spacing)
+            - cfg.column_spacing
+    } + cfg.margins[1]
         + cfg.margins[3];
     let height = line_per_column * (font::CHAR_HEIGHT + cfg.line_spacing) - cfg.line_spacing
         + cfg.margins[0]
