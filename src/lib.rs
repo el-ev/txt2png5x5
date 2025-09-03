@@ -67,14 +67,49 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
                     }
                     wlen += 1;
                 }
-                if pos + wlen >= line_length {
-                    formatted.push(b'\n');
-                    pos = 0;
-                    line_count += 1;
+
+                if pos + wlen <= line_length {
+                    formatted.extend(text[i..i + wlen].iter().map(|c| c.to_ascii_uppercase()));
+                    i += wlen;
+                    pos += wlen;
+                } else {
+                    let mut remaining = wlen;
+                    while remaining > 0 {
+                        let mut rem_space = line_length.saturating_sub(pos);
+                        if rem_space == 0 {
+                            formatted.push(b'\n');
+                            pos = 0;
+                            line_count += 1;
+                            rem_space = line_length;
+                        }
+
+                        if remaining + pos <= line_length {
+                            formatted.extend(
+                                text[i..i + remaining]
+                                    .iter()
+                                    .map(|c| c.to_ascii_uppercase()),
+                            );
+                            pos += remaining;
+                            i += remaining;
+                            remaining = 0;
+                        } else {
+                            if rem_space == 1 {
+                                formatted.push(b'\n');
+                                pos = 0;
+                                line_count += 1;
+                                continue;
+                            }
+                            let take = rem_space - 1;
+                            formatted
+                                .extend(text[i..i + take].iter().map(|c| c.to_ascii_uppercase()));
+                            formatted.push(b'\n');
+                            line_count += 1;
+                            pos = 0;
+                            i += take;
+                            remaining -= take;
+                        }
+                    }
                 }
-                formatted.extend(text[i..i + wlen].iter().map(|c| c.to_ascii_uppercase()));
-                i += wlen;
-                pos += wlen;
             }
         }
     }
