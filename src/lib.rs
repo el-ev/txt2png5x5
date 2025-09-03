@@ -138,13 +138,13 @@ fn render_image(pixels: &[Vec<bool>]) -> Vec<u8> {
         cfg.bg_color.0,
         cfg.bg_color.1,
         cfg.bg_color.2,
-        cfg.bg_color.3,
         cfg.fg_color.0,
         cfg.fg_color.1,
         cfg.fg_color.2,
-        cfg.fg_color.3,
     ];
     encoder.set_palette(&palette);
+    let alpha = [cfg.bg_color.3, cfg.fg_color.3];
+    encoder.set_trns(&alpha);
     let mut writer = encoder.write_header().unwrap();
     let mut image_data: Vec<u8> = Vec::with_capacity(
         pixels.len() * pixels[0].len() * cfg.scaling as usize * cfg.scaling as usize,
