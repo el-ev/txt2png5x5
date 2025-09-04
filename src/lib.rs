@@ -72,7 +72,15 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
                     formatted.extend(text[i..i + wlen].iter().map(|c| c.to_ascii_uppercase()));
                     i += wlen;
                     pos += wlen;
+                } else if wlen <= line_length {
+                    formatted.push(b'\n');
+                    pos = 0;
+                    line_count += 1;
+                    formatted.extend(text[i..i + wlen].iter().map(|c| c.to_ascii_uppercase()));
+                    i += wlen;
+                    pos += wlen;
                 } else {
+                    // TODO: Add an option to enable hyphenation
                     let mut remaining = wlen;
                     while remaining > 0 {
                         let mut rem_space = line_length.saturating_sub(pos);
@@ -128,8 +136,7 @@ fn render_pixels(total_lines: usize, text: &[u8]) -> Vec<Vec<bool>> {
     let cfg = CONFIG.with(|c| c.borrow().clone());
     let line_per_column = (total_lines as u32).div_ceil(cfg.column_count);
     let width = if total_lines == 1 {
-        text.len() as u32 * (font::CHAR_WIDTH + cfg.char_spacing)
-            - cfg.char_spacing
+        text.len() as u32 * (font::CHAR_WIDTH + cfg.char_spacing) - cfg.char_spacing
     } else {
         cfg.column_count
             * (cfg.column_width * (font::CHAR_WIDTH + cfg.char_spacing) - cfg.char_spacing
