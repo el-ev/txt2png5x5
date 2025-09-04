@@ -101,20 +101,13 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
                             i += remaining;
                             remaining = 0;
                         } else {
-                            if rem_space == 1 {
-                                formatted.push(b'\n');
-                                pos = 0;
-                                line_count += 1;
-                                continue;
-                            }
-                            let take = rem_space - 1;
                             formatted
-                                .extend(text[i..i + take].iter().map(|c| c.to_ascii_uppercase()));
+                                .extend(text[i..i + rem_space].iter().map(|c| c.to_ascii_uppercase()));
                             formatted.push(b'\n');
                             line_count += 1;
                             pos = 0;
-                            i += take;
-                            remaining -= take;
+                            i += rem_space;
+                            remaining -= rem_space;
                         }
                     }
                 }
