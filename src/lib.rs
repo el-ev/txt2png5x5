@@ -51,18 +51,10 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
                 line_count += 1;
                 i += 1;
             }
-            b' ' => {
-                if pos < line_length {
-                    formatted.push(b' ');
-                    pos += 1;
-                }
-                i += 1;
-            }
-            _ => {
+            c if c.is_ascii_alphabetic() => {
                 let mut wlen = 0usize;
                 while i + wlen < text.len() {
-                    let b = text[i + wlen];
-                    if b == b' ' || b == b'\n' {
+                    if !text[i + wlen].is_ascii_alphabetic() {
                         break;
                     }
                     wlen += 1;
@@ -101,8 +93,11 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
                             i += remaining;
                             remaining = 0;
                         } else {
-                            formatted
-                                .extend(text[i..i + rem_space].iter().map(|c| c.to_ascii_uppercase()));
+                            formatted.extend(
+                                text[i..i + rem_space]
+                                    .iter()
+                                    .map(|c| c.to_ascii_uppercase()),
+                            );
                             formatted.push(b'\n');
                             line_count += 1;
                             pos = 0;
@@ -111,6 +106,16 @@ fn format_text(text: &[u8]) -> (usize, Vec<u8>) {
                         }
                     }
                 }
+            }
+            c => {
+                if pos == line_length {
+                    formatted.push(b'\n');
+                    pos = 0;
+                    line_count += 1;
+                }
+                formatted.push(c);
+                pos += 1;
+                i += 1;
             }
         }
     }
